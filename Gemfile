@@ -7,6 +7,10 @@ gem 'rails', '3.0.11'
 
 gem 'sqlite3', '1.3.3'
 
+gem 'omniauth'
+gem 'omniauth-twitter'
+gem 'multi_json'
+
 group :development do
     gem 'rspec-rails', '2.6.1'
 end

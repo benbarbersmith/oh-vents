@@ -1,0 +1,31 @@
+[2012-03-13 23:19:11] INFO  WEBrick 1.3.1
+[2012-03-13 23:19:11] INFO  ruby 1.9.3 (2011-10-30) [x86_64-linux]
+[2012-03-13 23:19:11] INFO  WEBrick::HTTPServer#start: pid=31280 port=3000
+[2012-03-13 23:20:49] INFO  going to shutdown ...
+[2012-03-13 23:20:49] INFO  WEBrick::HTTPServer#start done.
+=> Booting WEBrick
+=> Rails 3.0.11 application starting in development on http://0.0.0.0:3000
+=> Call with -d to detach
+=> Ctrl-C to shutdown server
+DEPRECATION WARNING: config.action_view.debug_rjs will be removed in 3.1, from 3.1 onwards you will need to install prototype-rails to continue to use RJS templates . (called from service at /usr/lib/ruby/1.9.1/webrick/httpserver.rb:138)
+
+
+Started GET "/auth/twitter" for 127.0.0.1 at 2012-03-13 23:19:14 +0000
+
+OAuth::Unauthorized (401 Unauthorized):
+  
+
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (4.7ms)
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (9.2ms)
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (24.0ms)
+
+
+Started GET "/auth/twitter" for 127.0.0.1 at 2012-03-13 23:20:46 +0000
+
+OAuth::Unauthorized (401 Unauthorized):
+  
+
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/_trace.erb (4.4ms)
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/_request_and_response.erb (4.3ms)
+Rendered /usr/lib/ruby/gems/1.9.1/gems/actionpack-3.0.11/lib/action_dispatch/middleware/templates/rescues/diagnostics.erb within rescues/layout (18.3ms)
+Exiting

@@ -3,6 +3,8 @@ Events::Application.routes.draw do
   match '/contact', :to => 'pages#contact'
   match '/help',    :to => 'pages#help'
 
+  match '/auth/:provider/callback', :to => 'sessions#create'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
