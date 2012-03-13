@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <title><%= title %></title>
-    <%= stylesheet_link_tag 'bootstrap' %>
     <%= csrf_meta_tag %>
+    <%= render 'layouts/stylesheets' %>
   </head>
   <body>
-    <h1>oh!vents</h1>
-
-<%= yield %>
-
+    <%= render 'layouts/header' %>
+    <div class="container">
+      <%= hero %>
+      <section>
+        <div class="row">
+          <div class="span12">
+            <%= yield %>
+          </div>
+        </div>
+      </section>
+      <%= render 'layouts/footer' %>
+    </div>
   </body>
 </html>
