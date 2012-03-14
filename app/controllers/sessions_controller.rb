@@ -5,10 +5,22 @@ class SessionsController < ApplicationController
       # Create a new user or add an auth to existing user, depending on
       # whether there is already a user signed in.
       @auth = Authorization.create_from_hash(auth, current_user)
+      new = true
     end
     # Log the authorizing user in.
-    self.current_user = @auth.user
-
-    render :text => "Welcome, #{current_user.name}."
+    session[:user_id] = @auth.user.id
+    notice = "You've been signed in as #{self.current_user.screen_name}. "
+    notice += (new ? "Nice to meet you!" : "Welcome back!")
+    redirect_to root_url, :notice => notice 
   end
+
+  def destroy
+    reset_session
+    redirect_to root_url, :notice => "You've been signed out. Bye!"
+  end
+  
+  def failure
+    redirect_to root_url, :alert => "Something went wrong at the other end during sign in. Sorry!"
+  end
+
 end

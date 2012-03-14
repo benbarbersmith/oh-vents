@@ -8,12 +8,18 @@
           </a>
           <a class="brand" href="/">oh!vents</a>
           <div class="nav-collapse">
-            <ul class="nav">
+            <ul class="nav"> 
               <li><%= link_to "Home", home_path %></li>
               <li><%= link_to "Help", help_path %></li>
-              <li><%= link_to "Sign in", '#' %></li>
+            </ul>
+            <ul class="nav pull-right">
+              <li><%= greeting %></li>
+              <% if current_user %>
+              <li class="divider-vertical"></li>
+              <% end %>
+              <li><%= in_or_out %></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
       </div>
-    </div>
+  </div>

@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20120313233449) do
 
   create_table "users", :force => true do |t|
     t.string   "name"
+    t.string   "screen_name"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

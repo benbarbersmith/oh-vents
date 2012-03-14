@@ -4,6 +4,8 @@ Events::Application.routes.draw do
   match '/help',    :to => 'pages#help'
 
   match '/auth/:provider/callback', :to => 'sessions#create'
+  match '/auth/failure',            :to => 'sessions#failure'
+  match '/signout',                 :to => 'sessions#destroy'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
@@ -15,6 +17,7 @@ Events::Application.routes.draw do
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
+  #
 
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
