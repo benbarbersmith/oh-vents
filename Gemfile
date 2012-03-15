@@ -6,6 +6,7 @@ gem 'rails', '3.0.11'
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 gem 'sqlite3', '1.3.3'
+gem 'annotate', '2.4.0'
 
 gem 'omniauth'
 gem 'omniauth-twitter'
