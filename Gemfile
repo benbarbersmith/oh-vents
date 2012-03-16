@@ -13,7 +13,8 @@ gem 'omniauth-twitter'
 gem 'multi_json'
 
 group :development do
-    gem 'rspec-rails', '2.6.1'
+  gem 'rspec-rails', '2.6.1'
+  gem 'factory_girl_rails', '1.0'
 end
 
 group :test do
@@ -21,6 +22,7 @@ group :test do
   gem 'webrat', '0.7.1'
   gem 'autotest', '4.4.6'
   gem 'autotest-rails-pure', '4.1.2'
+  gem 'factory_girl_rails', '1.0'
 end
 
 # Use unicorn as the web server
