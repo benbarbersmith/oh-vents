@@ -4,8 +4,8 @@
 #
 #  id              :integer         not null, primary key
 #  name            :string(255)
-#  startdate       :datetime
-#  enddate         :datetime
+#  start_date       :datetime
+#  end_date         :datetime
 #  location        :string(255)
 #  details         :string(255)
 #  publicrsvp      :boolean
@@ -15,25 +15,27 @@
 #
 
 class Event < ActiveRecord::Base
-  attr_accessible :name, :startdate, :enddate, :location, :details
+  attr_accessible :name, :start_date, :end_date, :location, :details
 
   validates :name,      :presence => true,
                         :length   => { :maximum => 50 }
-  validates :startdate, :presence => true
+  validates :start_date, :presence => true
   validate  :is_in_future
-  validate  :is_after_startdate
+  validate  :is_after_start_date
+
+  validates_uniqueness_of :name, :scope => [:start_date, :location], :message => "has been used already for an event at that start date and location"
 
   before_save :default_values
 
   def is_in_future 
-    unless startdate.nil?
-      errors.add(:startdate, 'must be in the future') unless self.startdate.future?
+    unless start_date.nil?
+      errors.add(:start_date, "must be in the future") unless self.start_date.future?
     end
   end
 
-  def is_after_startdate
-    unless enddate.nil?
-      errors.add(:enddate, 'must be after #{:startdate}') if (self.startdate > self.enddate)
+  def is_after_start_date
+    unless end_date.nil?
+      errors.add(:end_date, "must be after start date") if (self.start_date > self.end_date)
     end
   end
 

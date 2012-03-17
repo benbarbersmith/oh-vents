@@ -27,4 +27,10 @@ module ApplicationHelper
       link_to "Sign in with Twitter",  signin_path(:twitter)
     end
   end
+
+  def flash_box(i)
+     alerts = {:alert => "alert-error", :notice=> " ", :success => "alert-success"}
+     return alerts[i]
+  end
+
 end

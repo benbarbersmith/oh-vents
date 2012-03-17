@@ -7,6 +7,8 @@ Events::Application.routes.draw do
   match '/auth/failure',            :to => 'sessions#failure'
   match '/signout',                 :to => 'sessions#destroy'
 
+  resources :events
+
   match '/event/new',               :to => 'events#new'
   match '/event/:id',               :to => 'events#show'
 

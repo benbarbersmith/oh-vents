@@ -23,8 +23,8 @@ ActiveRecord::Schema.define(:version => 20120315080737) do
 
   create_table "events", :force => true do |t|
     t.string   "name"
-    t.datetime "startdate"
-    t.datetime "enddate"
+    t.datetime "start_date"
+    t.datetime "end_date"
     t.string   "location"
     t.string   "details"
     t.boolean  "publicrsvp"

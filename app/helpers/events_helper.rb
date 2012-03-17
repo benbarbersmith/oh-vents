@@ -7,28 +7,28 @@ module EventsHelper
     end
   end
 
-  def startdate
-    if @event.enddate.nil?
+  def start_date
+    if @event.end_date.blank?
       name = "Date"
     else
       name = "Start Date"
     end
     return {:name => name, 
-            :value => @event.startdate.to_formatted_s(:rfc822),
-            :class => 'startdate'}
+            :value => @event.start_date.to_formatted_s(:rfc822),
+            :class => 'start_date'}
   end
 
-  def enddate
-    unless @event.enddate.nil?
+  def end_date
+    unless @event.end_date.blank?
       return {:name => 'End Date', 
-              :value => @event.enddate.to_formatted_s(:rfc822),
-              :class => 'enddate'}
+              :value => @event.end_date.to_formatted_s(:rfc822),
+              :class => 'end_date'}
     end
     return nil
   end
 
   def location
-    unless @event.location.nil?
+    unless @event.location.blank?
       return {:name =>  'Location', 
               :value => @event.location,
               :class => 'location'}
@@ -37,7 +37,7 @@ module EventsHelper
   end
 
   def details
-    unless @event.details.nil?
+    unless @event.details.blank?
       return {:name =>  'Details', 
               :value => @event.details,
               :class => 'details'}

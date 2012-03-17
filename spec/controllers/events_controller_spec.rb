@@ -5,12 +5,12 @@ describe EventsController do
 
   describe "GET 'new'" do
     it "should be successful" do
-      get 'new'
+      get :new
       response.should be_successful
     end
 
     it "should have the right title" do
-      get 'new'
+      get :new
       response.should have_selector("title", :content => "New Event")
     end
 
@@ -48,13 +48,13 @@ describe EventsController do
 
         it "should include a start date" do
           get :show, :id => @event
-          response.should have_selector("span", :class => "startdate", :content => @event.startdate.to_formatted_s(:rfc822))
+          response.should have_selector("span", :class => "start_date", :content => @event.start_date.to_formatted_s(:rfc822))
         end
 
         it "should have an end date if one was given" do
           get :show, :id => @event
-          unless @event.enddate.nil?
-            response.should have_selector("span", :class => "enddate", :content => @event.enddate.to_formatted_s(:rfc822))
+          unless @event.end_date.nil?
+            response.should have_selector("span", :class => "end_date", :content => @event.end_date.to_formatted_s(:rfc822))
           end
         end
 
@@ -75,4 +75,57 @@ describe EventsController do
       end
     end
   end
+
+  describe "POST 'create'" do
+
+    describe "failure" do
+
+      before(:each) do
+        @attr = {:name => "", :start_date => "", :end_date => "", :location => "", :details => ""}
+      end
+
+      it "should not create an event" do
+        lambda do
+          post :create, :event => @attr
+        end.should_not change(Event, :count)
+      end
+
+      it "should have the right title" do
+        post :create, :event => @attr
+        response.should have_selector("title", :content => "New Event")
+      end
+
+      it "should render the new event page" do
+        post :create, :user => @attr
+        response.should render_template('new')
+      end
+
+    end
+
+    describe "success" do
+      before(:each) do
+        dt = DateTime.now.change(:hour => (DateTime.now + 1.hour).hour)
+        @attr = { :name => "Event", :start_date => dt, :end_date => (dt + 1.hour), :location => "Somewhere", :details => "This is a description." }
+      end
+
+      it "should create an event" do
+        lambda do
+          post :create, :event => @attr
+        end.should change(Event, :count).by(1)
+      end
+
+      it "should redicrect to the event show page" do
+        post :create, :event => @attr
+        response.should redirect_to(event_path(assigns(:event)))
+      end
+
+      it "should have a success message" do
+        post :create, :event => @attr
+        flash[:success].should =~ /was created successfully/i
+      end
+
+    end
+
+  end
+
 end

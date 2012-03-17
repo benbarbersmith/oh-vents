@@ -9,22 +9,19 @@
   <body>
     <%= render 'layouts/header' %>
     <div class="container">
-      <% if flash[:alert] %>
-      <div class="alert alert-error">
-        <strong>Uh-oh!</strong> <%= flash[:alert] %>
-      </div>
-      <% end %>
-      <% if flash[:notice] %>
-      <div class="alert alert-success">
-        <%= flash[:notice] %>
-      </div>
+      <% flash.keys.each do |i| %>
+        <%= content_tag(:div, flash[i], :class => "alert #{flash_box(i)}") %>
       <% end %>
       <%= hero %>
       <section>
         <div class="row">
-          <div class="span12">
+          <div class="<%= content_for?(:sidebar) ? "span8" : "span12" %>">
             <%= yield %>
           </div>
+          <% if content_for?(:sidebar) %>
+          <div class="span4">
+            <%= yield(:sidebar) %>
+          <% end %>
         </div>
       </section>
       <%= render 'layouts/footer' %>

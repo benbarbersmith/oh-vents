@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     session[:user_id] = @auth.user.id
     notice = "You've been signed in as #{self.current_user.screen_name}. "
     notice += (new ? "Nice to meet you!" : "Welcome back!")
-    redirect_to root_url, :notice => notice 
+    redirect_to root_url, :flash => {:success => notice}
   end
 
   def destroy

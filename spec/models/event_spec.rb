@@ -18,7 +18,7 @@ require 'spec_helper'
 
 describe Event do
   before(:each) do
-    @attr = { :name => "Example Event", :startdate => DateTime.now() + 1.day }
+    @attr = { :name => "Example Event", :start_date => DateTime.now() + 1.day }
   end
 
   it "should create a new instance given valid attributes" do
@@ -31,7 +31,7 @@ describe Event do
   end
 
   it "should require a start date" do
-      no_start_event = Event.new(@attr.merge(:startdate => nil))
+      no_start_event = Event.new(@attr.merge(:start_date => nil))
       no_start_event.should_not be_valid
   end
 
@@ -43,13 +43,13 @@ describe Event do
 
   it "should reject events that are in the past" do
     yesterday = 1.day.ago
-    past_event = Event.new(@attr.merge(:startdate => yesterday))
+    past_event = Event.new(@attr.merge(:start_date => yesterday))
     past_event.should_not be_valid
   end
 
   it "should reject events that finish before they begin" do
     yesterday = 1.day.ago 
-    backwards_event = Event.new(@attr.merge(:enddate => yesterday))
+    backwards_event = Event.new(@attr.merge(:end_date => yesterday))
     backwards_event.should_not be_valid
   end
 end

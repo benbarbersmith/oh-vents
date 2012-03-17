@@ -11,6 +11,7 @@ gem 'annotate', '2.4.0'
 gem 'omniauth'
 gem 'omniauth-twitter'
 gem 'multi_json'
+gem 'simple_form'
 
 group :development do
   gem 'rspec-rails', '2.6.1'

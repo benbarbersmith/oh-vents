@@ -1,11 +1,11 @@
 <% if @event.errors.any? %>
 <div class="alert alert-error">
-  <h4 class="alert-heading">Oops! <%= pluralize(@event.errors.count, "error") %> got in the way.</h4>
-  There were problems with the following fields:
-  <ul>
+  <h4 class="alert-heading">Oops!</h4>
+  We found <%= pluralize(@event.errors.count, "problem") %> with the details you entered.
+<!--  <ul>
     <% @event.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
     <% end %>
-  </ul>
-</div>
+  </ul> -->
+</div> 
 <% end %>

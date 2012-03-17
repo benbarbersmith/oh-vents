@@ -17,3 +17,16 @@ footer p {
   float: left;
 }
 
+select.datetime { width: auto;}
+
+input,
+textarea,
+select,
+.wider
+{
+  width: 315px;
+}
+
+legend {
+  margin-bottom: 18px;
+}
