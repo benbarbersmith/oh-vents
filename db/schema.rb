@@ -29,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20120315080737) do
     t.string   "details"
     t.boolean  "publicrsvp"
     t.boolean  "publicguestlist"
+    t.integer  "user_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

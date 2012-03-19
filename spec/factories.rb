@@ -3,6 +3,7 @@
 Factory.define :minimal_event, :class => 'event' do |e|
   e.name        "Sunshiney day"
   e.start_date   (DateTime.now() + 1.days)
+  e.association :user
 end
 
 Factory.define :full_event, :class => 'event' do |e|
@@ -11,4 +12,15 @@ Factory.define :full_event, :class => 'event' do |e|
   e.end_date     (DateTime.now() + 2.days)
   e.location    "Somewhere, beyond the sea."
   e.details     "An epic party."
+  e.association :user
+end
+
+Factory.define :user do |u|
+  u.name        "David Evnull"
+  u.screen_name "devnull"  
+end
+
+Factory.define :other, :class => 'user' do |u|
+  u.name        "A. N. Other"
+  u.screen_name "another"
 end

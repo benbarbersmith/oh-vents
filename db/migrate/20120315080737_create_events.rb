@@ -8,9 +8,11 @@ class CreateEvents < ActiveRecord::Migration
       t.string :details
       t.boolean :publicrsvp
       t.boolean :publicguestlist
+      t.integer :user_id
 
       t.timestamps
     end
+    add_index :events, [:user_id, :start_date]
   end
 
   def self.down

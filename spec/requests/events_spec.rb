@@ -4,6 +4,11 @@ describe "Events" do
 
   describe "creation" do
 
+    before(:each) do
+      visit root_url
+      click_link "Sign in"
+    end
+
     describe "failure" do
       it "should not make a new event" do
         lambda do

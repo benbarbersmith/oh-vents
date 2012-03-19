@@ -4,6 +4,12 @@ describe EventsController do
   render_views
 
   describe "GET 'new'" do
+    
+    before(:each) do
+      @user = Factory(:user)
+      test_sign_in(@user)
+    end
+
     it "should be successful" do
       get :new
       response.should be_successful
@@ -78,6 +84,11 @@ describe EventsController do
 
   describe "POST 'create'" do
 
+    before(:each) do
+      @user = Factory(:user)
+      test_sign_in(@user)
+    end
+
     describe "failure" do
 
       before(:each) do
@@ -104,8 +115,10 @@ describe EventsController do
 
     describe "success" do
       before(:each) do
-        dt = DateTime.now.change(:hour => (DateTime.now + 1.hour).hour)
+        dt = (DateTime.now + 1.hour).change(:hour => (DateTime.now + 1.hour).hour)
         @attr = { :name => "Event", :start_date => dt, :end_date => (dt + 1.hour), :location => "Somewhere", :details => "This is a description." }
+        @user = Factory(:user)
+        test_sign_in(@user)
       end
 
       it "should create an event" do
@@ -114,7 +127,7 @@ describe EventsController do
         end.should change(Event, :count).by(1)
       end
 
-      it "should redicrect to the event show page" do
+      it "should redirect to the event show page" do
         post :create, :event => @attr
         response.should redirect_to(event_path(assigns(:event)))
       end
@@ -128,4 +141,131 @@ describe EventsController do
 
   end
 
+  describe "GET 'edit'" do
+    
+    before(:each) do
+      @event = Factory(:full_event)
+      @user = @event.user
+      test_sign_in(@user)
+    end
+
+    it "should be successful" do
+      get :edit, :id => @event
+      response.should be_success
+    end
+
+    it "should have the right title" do
+      get :edit, :id => @event
+      response.should have_selector("title", :content => "Edit event")
+    end
+
+  end
+
+  describe "PUT 'update'" do
+    
+    before(:each) do
+      @event = Factory(:full_event)
+      @owner = @event.user
+      test_sign_in(@owner)
+    end
+
+    describe "failure" do
+
+      before(:each) do
+        @attr = {:name => "", :start_date => (DateTime.now - 1.days)}
+      end
+
+      it "should render the edit page" do
+        put :update, :id => @event, :event => @attr
+        response.should render_template('edit')
+      end
+
+      it "should have the right title" do
+        put :update, :id => @event, :event => @attr
+        response.should have_selector("title", :content => "Edit event")
+      end
+      
+    end
+
+    describe "success" do
+
+      before(:each) do
+        @attr = { :name => "Edited Event", :start_date => (DateTime.now + 1.minute) }
+      end
+
+      it "should show a success message" do
+        put :update, :id => @event, :event => @attr
+        flash[:success].should =~ /updated/
+      end
+
+      it "should redirect to the event page" do 
+        put :update, :id => @event, :event => @attr
+        response.should redirect_to(event_path(@event))
+      end
+
+      it "should change the event's attributes" do
+        put :update, :id => @event, :event => @attr
+        @event.reload
+        @event.name.should == @attr[:name]
+        @event.start_date.to_formatted_s(:rfc822).should == @attr[:start_date].to_formatted_s(:rfc822)
+      end
+
+    end
+
+  end
+
+  describe "authentication of new/create/edit/update pages" do
+
+    before(:each) do
+      @owner = Factory(:user)
+      @event = Factory(:full_event)
+      @attr  = { :name => @event.name, :start_date => (DateTime.now + 1.hours) }
+    end
+
+    describe "for non-signed-in users" do
+
+      it "should deny access to 'new'" do
+        get :new
+        response.should redirect_to(signin_path(:twitter))
+      end
+
+      it "should deny access to 'create'" do
+        post :create, :event => @attr
+        response.should redirect_to(signin_path(:twitter))
+      end
+
+      it "should deny access to 'edit'" do
+        get :edit, :id => @event
+        response.should redirect_to(signin_path(:twitter))
+      end
+
+      it "should deny access to 'update'" do
+        put :update, :id => @event, :event => @attr
+        response.should redirect_to(signin_path(:twitter))
+      end
+
+    end
+
+    describe "for non-owners" do
+
+      before(:each) do
+        @other = Factory(:other)
+        test_sign_in(@other)
+      end
+
+      it "should deny access to 'edit'" do
+        get :edit, :id => @event
+        response.should redirect_to(event_path(@event))
+      end
+
+      it "should deny access to 'update'" do
+        put :update, :id => @event, :event => @attr
+        response.should redirect_to(event_path(@event))
+      end
+
+    end
+
+  end
+
 end
+

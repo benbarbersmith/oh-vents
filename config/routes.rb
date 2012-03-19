@@ -11,6 +11,7 @@ Events::Application.routes.draw do
 
   match '/event/new',               :to => 'events#new'
   match '/event/:id',               :to => 'events#show'
+  match '/event/:id/edit',          :to => 'events#edit'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

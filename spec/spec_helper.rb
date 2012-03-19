@@ -7,6 +7,14 @@ require 'rspec/rails'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
+OmniAuth.config.test_mode = true
+OmniAuth.config.add_mock(:twitter, {  :provider    => "twitter", 
+                                  :uid         => "1234", 
+                                  :user_info   => {   :name       => "Bob hope",
+                                                      :nickname   => "bobby",
+                                                      :urls       => {:Twitter => "www.twitter.com/bobster"}},
+                                  :credentials => {   :auth_token => "lk2j3lkjasldkjflk3ljsdf"} })
+
 RSpec.configure do |config|
   # == Mock Framework
   #
@@ -24,4 +32,15 @@ RSpec.configure do |config|
   # examples within a transaction, remove the following line or assign false
   # instead of true.
   config.use_transactional_fixtures = true
+
+  def signin_path(prov)
+    return "/auth/#{prov}"
+  end
+
+  def test_sign_in(user)
+    session[:user_id] = user.id
+  end
+
 end
+
+

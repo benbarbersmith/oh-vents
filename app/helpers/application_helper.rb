@@ -33,4 +33,12 @@ module ApplicationHelper
      return alerts[i]
   end
 
+  def deny_access
+    redirect_to signin_path(:twitter), :notice => "You must be signed in to continue."
+  end
+
+  def current_user?(user)
+    user.id == session[:user_id] 
+  end
+
 end
