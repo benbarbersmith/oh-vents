@@ -1,5 +1,5 @@
 class EventsController < ApplicationController
-  before_filter :authenticate, :only => [:new, :edit, :create, :update, :index]
+  before_filter :authenticate, :only => [:new, :edit, :create, :update, :index, :cancel, :destroy]
   before_filter :correct_user, :only => [:edit, :update, :cancel, :destroy]
 
   include ApplicationHelper

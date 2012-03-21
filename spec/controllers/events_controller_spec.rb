@@ -232,8 +232,9 @@ describe EventsController do
 
     describe "for non-signed-in users" do
 
-      it "should redirect to the public events page" do
-        response.should redirect_to("/events/public")
+      it "should redirect to the signin page" do
+        get :index
+        response.should redirect_to(signin_path(:twitter))
       end
 
     end
@@ -269,13 +270,13 @@ describe EventsController do
 
       it "should paginate events" do
         @events = @all_events
-        30.times do
+        50.times do
           @events << Factory(:full_event, :name => Factory.next(:name), :start_date => Factory.next(:start_date), :user => @owner)
         end
 
         get :index
-        response.should have_selector("div.pagination")
-        response.should have_selector("a", :href => "/events?page=2", :content => "2")
+        response.should have_selector("div", :class => "pagination")
+        response.should have_selector("a", :content => "2")
       end
 
       it "should have an element for each event" do
@@ -283,6 +284,50 @@ describe EventsController do
         @owner.events.each do |event|
           response.should have_selector("dd", :content => event.name)
         end
+      end
+
+    end
+
+  end
+
+  describe "DELETE 'destroy'" do
+    
+    before(:each) do
+      @event = Factory(:full_event)
+      @owner = @event.user
+      @user  = Factory(:user)
+    end
+
+    describe "as a non-signed-in user" do
+      it "should deny access" do
+        delete :destroy, :id => @event
+        response.should redirect_to(signin_path(:twitter))
+      end
+    end
+
+    describe "as a non-owner user" do
+      it "should protect the page" do
+        test_sign_in(@user)
+        delete :destroy, :id => @event
+        response.should redirect_to(event_path(@event))
+      end
+    end
+
+    describe "as an owner" do
+
+      before(:each) do
+        test_sign_in(@owner)
+      end
+
+      it "should destroy the event" do
+        lambda do
+          delete :destroy, :id => @event.id
+        end.should change(Event, :count).by(-1)
+      end
+
+      it "should redirect to the events page" do
+        delete :destroy, :id => @event
+        response.should redirect_to(events_path)
       end
 
     end
