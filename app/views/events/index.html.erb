@@ -1,0 +1,17 @@
+<%= page_header (@public ? @title : "Events for #{@user.screen_name}" ) %>
+
+<% if @events.any? %>
+
+<h2><%= @time %> events</h2>
+<dl class="<%= @time.downcase %>-events dl-horizontal">
+  <% @events.each do |event| %> 
+    <%= render event %>
+  <% end %>
+</dl>
+
+<% page_navigation_links @events %>
+
+<% end %>
+
+<p><%= link_to("View #{@other.downcase} events", "#{events_path}/#{@other.downcase}") if (@other_events.count > 0 and @public.nil?) %></p>
+<p><%= link_to("Host new event", new_event_path) %></p>

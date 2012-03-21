@@ -1,0 +1,8 @@
+<%= page_header "Cancel event" %>
+
+<p>Are you sure you want to cancel your event "<%= @event.name %>"?</p>
+
+<div class="form-actions">
+  <%= link_to "Cancel event", @event, :method => :delete, :title => "Delete #{@event.name}", :class => "btn btn-danger" %>
+  <%= link_to "Back", event_path(@event), :class => "btn" %>
+</div>

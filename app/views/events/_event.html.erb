@@ -1,0 +1,2 @@
+    <dt><%= event.start_date.future? ? event.start_date.to_formatted_s(:friendly) : time_ago_in_words(event.start_date) %></dt>
+    <dd><%= link_to event.name, event_path(event) %></dd>
