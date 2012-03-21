@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(:version => 20120315080737) do
     t.datetime "updated_at"
   end
 
+  add_index "events", ["user_id", "start_date"], :name => "index_events_on_user_id_and_start_date"
+
   create_table "users", :force => true do |t|
     t.string   "name"
     t.string   "screen_name"
