@@ -1,6 +1,6 @@
 class EventsController < ApplicationController
-  before_filter :authenticate, :only => [:new, :edit, :create, :update]
-  before_filter :correct_user, :only => [:edit, :update]
+  before_filter :authenticate, :only => [:new, :edit, :create, :update, :index]
+  before_filter :correct_user, :only => [:edit, :update, :cancel, :destroy]
 
   include ApplicationHelper
 
@@ -11,6 +11,9 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
+    if @event.publicrsvp == false then
+      redirect_to("/events/public", :notice => "That event is private. Sorry!") unless current_user?(@event.user)
+    end
     @title = @event.name
   end
 
@@ -41,6 +44,42 @@ class EventsController < ApplicationController
     @title = "Edit event"
   end
 
+  def index
+    @title = "My events"
+    @user = current_user
+    @events = @user.events.where("DATETIME(start_date) >= DATETIME(:time)", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @other_events = @user.events.where("DATETIME(start_date) < DATETIME(:time)", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @time = "Upcoming"
+    @other = "Past"
+  end
+
+  def past_index
+    index
+    @other, @time = @time, @other 
+    @other_events, @events = @events, @other_events
+    render('index')
+  end
+
+  def public_index
+    @title = "Public Events"
+    @public = true
+    @events = Event.where("DATETIME(start_date) >= DATETIME(:time) AND publicrsvp == :true", :time => DateTime.now, :true => true).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @other_events = []
+    @time = "Upcoming"
+    render('index')
+  end
+
+  def cancel
+    @title = "Cancel event"
+    @event = Event.find(params[:id])
+  end
+
+  def destroy
+    Event.find(params[:id]).destroy
+    flash[:success] = "Event cancelled."
+    redirect_to events_path
+  end
+
   private
 
     def authenticate
@@ -49,7 +88,7 @@ class EventsController < ApplicationController
 
     def correct_user
       @event = Event.find(params[:id])
-      redirect_to(event_path(@event)) unless current_user?(@event.user)
+      redirect_to(event_path(@event), :notice => "Only the owner of an event may edit it. Sorry!") unless current_user?(@event.user)
     end
 
 end

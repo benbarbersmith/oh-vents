@@ -15,6 +15,14 @@ Factory.define :full_event, :class => 'event' do |e|
   e.association :user
 end
 
+Factory.sequence :name do |n|
+  "Event #{n}"
+end
+
+Factory.sequence :start_date do |n|
+  (DateTime.now + n.minutes)
+end
+
 Factory.define :user do |u|
   u.name        "David Evnull"
   u.screen_name "devnull"  

@@ -1,7 +1,11 @@
-<h1 class="eventname"><%= @event.name %></h1>
+<%= page_header "#{@event.name} ", "eventname", "#{distance_of_time_in_words_to_now(@event.start_date)} #{(@event.start_date.future? ? 'to go' : 'ago')}" %>
 <dl id="eventinfo" class="dl-horizontal">
   <%= event_item start_date %>
   <%= event_item end_date %>
   <%= event_item location %>
   <%= event_item details %>
+  <%= event_item publicity %>
+  <% if current_user?@event.user %>
+    <dt></dt><dd class="edit-link"><%= link_to "Edit event", edit_event_path(@event) %> | <%= link_to "Cancel event", "/event/#{@event.id}/cancel" %></dd>
+  <% end %>
 </dl>

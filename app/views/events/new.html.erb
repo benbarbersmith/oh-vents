@@ -1,8 +1,8 @@
 <% date = (DateTime.now + 1.hours).change(:hour => (DateTime.now + 1.hours).hour) %>
-<h1>New Event</h1>
+<%= page_header "New event" %>
 <%= simple_form_for(@event, :html => {:class => "form-horizontal"}) do |f| %>
   <fieldset>
-    <legend>Event Details</legend>
+    <legend>Event details</legend>
     <%= render 'shared/error_messages' %>
     <%= f.input :name, :required => false, :placeholder => "Mermaid Riding" %>
     <%= f.input :start_date, :required => false, :order => [:day, :month, :year], :start_year => DateTime.now.year, :default => date %>

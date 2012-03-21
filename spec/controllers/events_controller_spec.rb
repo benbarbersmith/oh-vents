@@ -54,27 +54,27 @@ describe EventsController do
 
         it "should include a start date" do
           get :show, :id => @event
-          response.should have_selector("span", :class => "start_date", :content => @event.start_date.to_formatted_s(:rfc822))
+          response.should have_selector("dd", :class => "start_date", :content => @event.start_date.to_formatted_s(:friendly))
         end
 
         it "should have an end date if one was given" do
           get :show, :id => @event
           unless @event.end_date.nil?
-            response.should have_selector("span", :class => "end_date", :content => @event.end_date.to_formatted_s(:rfc822))
+            response.should have_selector("dd", :class => "end_date", :content => @event.end_date.to_formatted_s(:friendly))
           end
         end
 
         it "should have a location if one was given" do
           get :show, :id => @event
           unless @event.location.nil?
-            response.should have_selector("span", :class => "location", :content => @event.location)
+            response.should have_selector("dd", :class => "location", :content => @event.location)
           end
         end
 
         it "should have a details if one was given" do
           get :show, :id => @event
           unless @event.details.nil?
-            response.should have_selector("span", :class => "details", :content => @event.details)
+            response.should have_selector("dd", :class => "details", :content => @event.details)
           end
         end
         
@@ -207,7 +207,82 @@ describe EventsController do
         put :update, :id => @event, :event => @attr
         @event.reload
         @event.name.should == @attr[:name]
-        @event.start_date.to_formatted_s(:rfc822).should == @attr[:start_date].to_formatted_s(:rfc822)
+        @event.start_date.to_formatted_s(:friendly).should == @attr[:start_date].to_formatted_s(:friendly)
+      end
+
+    end
+
+  end
+
+  describe "GET 'index'" do
+
+    before(:each) do
+      @event1 = Factory(:full_event)
+      @owner = @event1.user
+
+      @event2, @private_event, @past_event = Factory(:full_event, :name => "And again.", :user => Factory(:other)), Factory(:full_event, :name => 'Super Sekrit', :publicrsvp => false, :user => @owner), Factory(:full_event, :name => "Past Event, Honest.", :start_date => (DateTime.now + 0.5.seconds), :user => @owner)
+
+      @public_events =  [ @event1, @event2]
+      @all_events =     [ @event1, @event2, @private_event, @past_event ]
+      @private_events = [ @private_event ]
+
+      @other = Factory(:user)
+
+    end
+
+    describe "for non-signed-in users" do
+
+      it "should redirect to the public events page" do
+        response.should redirect_to("/events/public")
+      end
+
+    end
+
+    describe "for signed-in users" do
+
+      before(:each) do
+        test_sign_in(@owner)
+      end
+
+      it "should be successful" do
+        get :index
+        response.should be_success 
+      end
+
+      it "should have the right title" do
+        get :index
+        response.should have_selector("title", :content => "My events")
+    end
+
+      it "should return only events they own" do
+        get :index
+        @owner.events.each do |event|
+          response.should have_selector("dd", :content => event.name)
+        end
+        response.should_not have_selector("dd", :content => @event2.name)
+      end
+
+      it "should return events in ascending order of start date" do
+        get :index
+        false # Needs test.
+      end
+
+      it "should paginate events" do
+        @events = @all_events
+        30.times do
+          @events << Factory(:full_event, :name => Factory.next(:name), :start_date => Factory.next(:start_date), :user => @owner)
+        end
+
+        get :index
+        response.should have_selector("div.pagination")
+        response.should have_selector("a", :href => "/events?page=2", :content => "2")
+      end
+
+      it "should have an element for each event" do
+        get :index
+        @owner.events.each do |event|
+          response.should have_selector("dd", :content => event.name)
+        end
       end
 
     end
@@ -244,6 +319,10 @@ describe EventsController do
         response.should redirect_to(signin_path(:twitter))
       end
 
+      it "should deny access to 'index'" do
+        get :index
+        response.should redirect_to(signin_path(:twitter))
+      end
     end
 
     describe "for non-owners" do

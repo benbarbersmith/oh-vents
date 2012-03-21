@@ -7,11 +7,17 @@ Events::Application.routes.draw do
   match '/auth/failure',            :to => 'sessions#failure'
   match '/signout',                 :to => 'sessions#destroy'
 
+  get '/events/public',             :to => 'events#public_index'
+  get '/events/past',               :to => 'events#past_index'
+  get '/events/upcoming',           :to => 'events#index'
+  
   resources :events
 
+  match '/events' ,                 :to => 'events#index'
   match '/event/new',               :to => 'events#new'
   match '/event/:id',               :to => 'events#show'
   match '/event/:id/edit',          :to => 'events#edit'
+  match '/event/:id/cancel',        :to => 'events#cancel'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

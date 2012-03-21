@@ -30,3 +30,18 @@ select,
 legend {
   margin-bottom: 18px;
 }
+
+dl.upcoming-events dt, dl.past-events dt {
+  width: 240px;
+  height: 24px;
+  margin-right: 20px;
+}
+
+dl.upcoming-events dd, dl.past-events dd {
+  width: auto;
+  height: 24px;
+}
+
+dd.edit-link, dd.publicity {
+  margin-top: 13px;
+}

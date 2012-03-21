@@ -15,7 +15,7 @@
 #
 
 class Event < ActiveRecord::Base
-  attr_accessible :name, :start_date, :end_date, :location, :details
+  attr_accessible :name, :start_date, :end_date, :location, :details, :publicrsvp, :publicguestlist
   belongs_to :user
 
   validates :user_id,   :presence => true
@@ -51,7 +51,11 @@ class Event < ActiveRecord::Base
 
   private
     def default_values
-      self.publicrsvp      ||= true
-      self.publicguestlist ||= true
+      if self.publicrsvp.nil? then
+        self.publicrsvp      ||= true
+      end
+      if self.publicguestlist.nil? then
+        self.publicguestlist ||= true
+      end
     end
 end
