@@ -1,0 +1,6 @@
+    <% date = DateTime.now.change(:hour => (DateTime.now + 1.hours).hour) %>
+    <%= f.input :name, :required => false, :placeholder => "Mermaid Riding" %>
+    <%= f.input :start_date, :required => false, :order => [:day, :month, :year], :start_year => DateTime.now.year, :default => date %>
+    <%= f.input :end_date, :order => [:day, :month, :year], :start_year => DateTime.now.year, :include_blank => true, :default => nil  %>
+    <%= f.input :location, :placeholder => "On a Boat, Motherfucker", :default => nil  %>
+    <%= f.input :details, :placeholder => "We'll be riding on a dolphin doing tricks and shit!", :default => nil, :as => :text, :input_html => {:rows => 10, :cols => 20, :class => "wider" } %>
