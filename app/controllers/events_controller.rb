@@ -47,8 +47,8 @@ class EventsController < ApplicationController
   def index
     @title = "My events"
     @user = current_user
-    @events = @user.events.where("DATETIME(start_date) >= DATETIME(:time)", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
-    @other_events = @user.events.where("DATETIME(start_date) < DATETIME(:time)", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @events = @user.events.where("start_date >= :time", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @other_events = @user.events.where("start_date < :time", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
     @time = "Upcoming"
     @other = "Past"
   end
@@ -63,7 +63,7 @@ class EventsController < ApplicationController
   def public_index
     @title = "Public Events"
     @public = true
-    @events = Event.where("DATETIME(start_date) >= DATETIME(:time) AND publicrsvp == :true", :time => DateTime.now, :true => true).order("start_date").paginate(:page => params[:page], :per_page => 20)
+    @events = Event.where("start_date >= :time AND publicrsvp = true", :time => DateTime.now).order("start_date").paginate(:page => params[:page], :per_page => 20)
     @other_events = []
     @time = "Upcoming"
     render('index')
